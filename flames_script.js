@@ -2,53 +2,66 @@
 
 class FlamesDashboard {
     constructor() {
-        this.squadData = {
-            team_name: "Flames CC",
-            squad: [
-                {
-                    id: "bilal",
-                    full_name: "Bilal Ahmed",
-                    common_names: ["Bilal", "Bilal Ahmed"],
-                    role: "All-rounder",
-                    batting_style: "Right-handed",
-                    bowling_style: "Right-arm fast",
-                    is_captain: true,
-                    is_wicketkeeper: false,
-                    stats: { runs: 1250, wickets: 45, matches: 35 }
-                },
-                {
-                    id: "safi",
-                    full_name: "Safi Ahmed",
-                    common_names: ["Safi", "Safi Ahmed"],
-                    role: "Batsman",
-                    batting_style: "Right-handed",
-                    bowling_style: "Right-arm medium",
-                    is_captain: false,
-                    is_wicketkeeper: false,
-                    stats: { runs: 980, wickets: 12, matches: 32 }
-                },
-                {
-                    id: "nehal",
-                    full_name: "Nehal Ahmed",
-                    common_names: ["Nehal", "Nehal Ahmed"],
-                    role: "Bowler",
-                    batting_style: "Right-handed",
-                    bowling_style: "Right-arm fast",
-                    is_captain: false,
-                    is_wicketkeeper: false,
-                    stats: { runs: 320, wickets: 68, matches: 30 }
-                },
-                {
-                    id: "hassan",
-                    full_name: "Hassan Khan",
-                    common_names: ["Hassan", "Hassan Khan"],
-                    role: "Wicketkeeper",
-                    batting_style: "Right-handed",
-                    bowling_style: "N/A",
-                    is_captain: false,
-                    is_wicketkeeper: true,
-                    stats: { runs: 750, catches: 45, stumpings: 12, matches: 28 }
-                },
+        // Load data from Excel extraction if available
+        if (typeof EXCEL_CRICKET_DATA !== 'undefined') {
+            console.log('Loading Excel cricket data...');
+            this.squadData = {
+                team_name: EXCEL_CRICKET_DATA.team_name,
+                squad: EXCEL_CRICKET_DATA.squad
+            };
+            this.matchesData = EXCEL_CRICKET_DATA.matches;
+            this.playerStats = EXCEL_CRICKET_DATA.player_stats;
+            this.dataSource = 'Excel';
+        } else {
+            // Fallback to sample data
+            console.log('Using sample data...');
+            this.squadData = {
+                team_name: "Flames CC",
+                squad: [
+                    {
+                        id: "bilal",
+                        full_name: "Bilal Ahmed",
+                        common_names: ["Bilal", "Bilal Ahmed"],
+                        role: "All-rounder",
+                        batting_style: "Right-handed",
+                        bowling_style: "Right-arm fast",
+                        is_captain: true,
+                        is_wicketkeeper: false,
+                        stats: { runs: 1250, wickets: 45, matches: 35 }
+                    },
+                    {
+                        id: "safi",
+                        full_name: "Safi Ahmed",
+                        common_names: ["Safi", "Safi Ahmed"],
+                        role: "Batsman",
+                        batting_style: "Right-handed",
+                        bowling_style: "Right-arm medium",
+                        is_captain: false,
+                        is_wicketkeeper: false,
+                        stats: { runs: 980, wickets: 12, matches: 32 }
+                    },
+                    {
+                        id: "nehal",
+                        full_name: "Nehal Ahmed",
+                        common_names: ["Nehal", "Nehal Ahmed"],
+                        role: "Bowler",
+                        batting_style: "Right-handed",
+                        bowling_style: "Right-arm fast",
+                        is_captain: false,
+                        is_wicketkeeper: false,
+                        stats: { runs: 320, wickets: 68, matches: 30 }
+                    },
+                    {
+                        id: "hassan",
+                        full_name: "Hassan Khan",
+                        common_names: ["Hassan", "Hassan Khan"],
+                        role: "Wicketkeeper",
+                        batting_style: "Right-handed",
+                        bowling_style: "N/A",
+                        is_captain: false,
+                        is_wicketkeeper: true,
+                        stats: { runs: 750, catches: 45, stumpings: 12, matches: 28 }
+                    },
                 {
                     id: "ali",
                     full_name: "Ali Raza",
@@ -260,9 +273,18 @@ class FlamesDashboard {
     }
 
     updateHeaderStats() {
-        const totalMatches = 48;
-        const winRate = 65;
-        const totalPlayers = this.squadData.squad.length;
+        let totalMatches = 48;
+        let winRate = 65;
+        let totalPlayers = this.squadData.squad.length;
+
+        // Use Excel data if available
+        if (this.dataSource === 'Excel' && this.matchesData) {
+            totalMatches = this.matchesData.all.length;
+            
+            // Calculate win rate from actual matches
+            const wins = this.matchesData.all.filter(m => m.result === 'Won').length;
+            winRate = totalMatches > 0 ? Math.round((wins / totalMatches) * 100) : 0;
+        }
 
         document.getElementById('headerMatches').textContent = totalMatches;
         document.getElementById('headerWinRate').textContent = `${winRate}%`;
@@ -280,7 +302,7 @@ class FlamesDashboard {
         const matchesGrid = document.getElementById('matchesGrid');
         if (!matchesGrid) return;
 
-        const matches = [
+        let matches = [
             { opponent: "Sledgers", date: "27-Feb-21", result: "Won", score: "145/7 vs 120/10" },
             { opponent: "Classic XI Karachi", date: "26-Sep-21", result: "Won", score: "180/5 vs 165/8" },
             { opponent: "Grace Sports", date: "17-Oct-21", result: "Lost", score: "140/9 vs 145/6" },
@@ -289,6 +311,18 @@ class FlamesDashboard {
             { opponent: "Labbaik Sports", date: "15-Nov-21", result: "Lost", score: "130/8 vs 135/7" },
             { opponent: "Gladiator CC", date: "21-Nov-21", result: "Won", score: "155/9 vs 150/10" }
         ];
+
+        // Use Excel data if available
+        if (this.dataSource === 'Excel' && this.matchesData) {
+            matches = this.matchesData.all.map(m => ({
+                opponent: m.opposition,
+                date: m.date ? new Date(m.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : 'N/A',
+                result: m.result,
+                score: `${m.team_score} vs ${m.opposition_score}`,
+                format: m.format,
+                venue: m.venue || 'N/A'
+            }));
+        }
 
         matchesGrid.innerHTML = '';
         matches.forEach(match => {
@@ -312,18 +346,42 @@ class FlamesDashboard {
         if (!playersGrid) return;
 
         playersGrid.innerHTML = '';
-        this.squadData.squad.forEach(player => {
+        
+        // Use Excel player stats if available
+        let playersToShow = this.squadData.squad;
+        if (this.dataSource === 'Excel' && this.playerStats) {
+            // Merge squad with player stats
+            playersToShow = this.squadData.squad.map(player => {
+                const stats = this.playerStats.find(s => s.name === player.name || s.name === player.full_name);
+                if (stats) {
+                    return {
+                        ...player,
+                        stats: {
+                            matches: stats.matches || 0,
+                            runs: stats.runs || 0,
+                            wickets: stats.wickets || 0,
+                            batting_average: stats.batting_average || 0,
+                            strike_rate: stats.strike_rate || 0,
+                            economy: stats.economy || 0
+                        }
+                    };
+                }
+                return player;
+            });
+        }
+        
+        playersToShow.forEach(player => {
             const playerCard = document.createElement('div');
             playerCard.className = 'player-card';
             playerCard.innerHTML = `
                 <div class="player-info">
-                    <h4>${player.full_name} ${player.is_captain ? '👑' : ''} ${player.is_wicketkeeper ? '🥅' : ''}</h4>
+                    <h4>${player.full_name || player.name} ${player.is_captain ? '👑' : ''} ${player.is_wicketkeeper ? '🥅' : ''}</h4>
                     <p><strong>Role:</strong> ${player.role}</p>
                     <p><strong>Batting:</strong> ${player.batting_style}</p>
                     <p><strong>Bowling:</strong> ${player.bowling_style}</p>
-                    <p><strong>Runs:</strong> ${player.stats.runs || 0}</p>
-                    <p><strong>Wickets:</strong> ${player.stats.wickets || 0}</p>
-                    <p><strong>Matches:</strong> ${player.stats.matches || 0}</p>
+                    <p><strong>Matches:</strong> ${player.stats?.matches || 0}</p>
+                    <p><strong>Runs:</strong> ${player.stats?.runs || 0} ${player.stats?.batting_average ? `(Avg: ${player.stats.batting_average})` : ''}</p>
+                    <p><strong>Wickets:</strong> ${player.stats?.wickets || 0} ${player.stats?.economy ? `(Econ: ${player.stats.economy})` : ''}</p>
                 </div>
             `;
             playersGrid.appendChild(playerCard);
