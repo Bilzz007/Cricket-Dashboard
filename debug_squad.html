@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Squad Tab</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .tab-btn { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .tab-btn.active { background: #28a745; }
+        .tab-content { display: none; padding: 20px; border: 1px solid #ccc; margin: 10px 0; }
+        .tab-content.active { display: block; }
+        .squad-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .player-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+        .btn { padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Debug Squad Tab</h1>
+    
+    <div>
+        <button class="tab-btn active" data-tab="test1">Test Tab 1</button>
+        <button class="tab-btn" data-tab="squad">Squad Tab</button>
+        <button class="tab-btn" data-tab="test3">Test Tab 3</button>
+    </div>
+    
+    <div id="test1" class="tab-content active">
+        <h2>Test Tab 1</h2>
+        <p>This is test tab 1. If you can see this and switch to other tabs, the basic tab functionality works.</p>
+    </div>
+    
+    <div id="squad" class="tab-content">
+        <h2>🔥 Flames CC Squad Management</h2>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn btn-primary" onclick="addPlayer()">Add New Player</button>
+            <button class="btn btn-success" onclick="saveSquad()">Save Squad</button>
+            <button class="btn btn-secondary" onclick="exportSquad()">Export JSON</button>
+        </div>
+        
+        <div class="squad-grid" id="squadGrid">
+            <!-- Player cards will be generated here -->
+        </div>
+    </div>
+    
+    <div id="test3" class="tab-content">
+        <h2>Test Tab 3</h2>
+        <p>This is test tab 3. If you can switch between all tabs, the navigation works.</p>
+    </div>
+    
+    <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+        <h3>Console Messages:</h3>
+        <div id="console" style="background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        // Simple console logging
+        function log(message) {
+            console.log(message);
+            const consoleDiv = document.getElementById('console');
+            consoleDiv.innerHTML += new Date().toLocaleTimeString() + ': ' + message + '<br>';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // Simple tab switching
+        function setupTabs() {
+            log('Setting up tabs...');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    log('Clicked tab: ' + targetTab);
+                    
+                    // Remove active from all
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active to clicked
+                    button.classList.add('active');
+                    const targetContent = document.getElementById(targetTab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        log('Activated tab content: ' + targetTab);
+                        
+                        if (targetTab === 'squad') {
+                            loadSquad();
+                        }
+                    } else {
+                        log('ERROR: Target content not found: ' + targetTab);
+                    }
+                });
+            });
+        }
+
+        // Simple squad loading
+        function loadSquad() {
+            log('Loading squad...');
+            const squadGrid = document.getElementById('squadGrid');
+            
+            const players = [
+                { name: 'Bilal Ahmed', role: 'Captain & All-rounder', style: 'Right-handed' },
+                { name: 'Safi Ahmed', role: 'Batsman', style: 'Right-handed' },
+                { name: 'Nehal Ahmed', role: 'Bowler', style: 'Right-arm fast' }
+            ];
+            
+            squadGrid.innerHTML = '';
+            players.forEach(player => {
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.innerHTML = `
+                    <h4>${player.name}</h4>
+                    <p><strong>Role:</strong> ${player.role}</p>
+                    <p><strong>Style:</strong> ${player.style}</p>
+                    <button class="btn btn-primary" onclick="editPlayer('${player.name}')">Edit</button>
+                `;
+                squadGrid.appendChild(card);
+            });
+            
+            log('Squad loaded with ' + players.length + ' players');
+        }
+
+        // Squad functions
+        function addPlayer() {
+            log('Add player clicked');
+            alert('Add player functionality would go here');
+        }
+
+        function saveSquad() {
+            log('Save squad clicked');
+            alert('Squad saved!');
+        }
+
+        function exportSquad() {
+            log('Export squad clicked');
+            alert('Squad exported!');
+        }
+
+        function editPlayer(playerName) {
+            log('Edit player clicked: ' + playerName);
+            alert('Edit player: ' + playerName);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            log('Page loaded, initializing...');
+            setupTabs();
+            log('Initialization complete');
+        });
+    </script>
+</body>
+</html>

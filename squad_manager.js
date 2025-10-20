@@ -7,9 +7,12 @@ class SquadManager {
     }
 
     async init() {
+        console.log('SquadManager: Initializing...');
         await this.loadSquad();
+        console.log('SquadManager: Squad loaded:', this.squadData);
         this.setupEventListeners();
         this.renderSquad();
+        console.log('SquadManager: Initialization complete');
     }
 
     async loadSquad() {
@@ -18,14 +21,49 @@ class SquadManager {
             this.squadData = await response.json();
         } catch (error) {
             console.error('Error loading squad:', error);
-            // Initialize with empty squad if file doesn't exist
+            // Initialize with default squad data if file doesn't exist
             this.squadData = {
                 team_name: "Flames CC",
-                squad: [],
-                name_mapping: {},
+                squad: [
+                    {
+                        "id": "bilal",
+                        "full_name": "Bilal Ahmed",
+                        "common_names": ["Bilal", "Bilal Ahmed"],
+                        "role": "All-rounder",
+                        "batting_style": "Right-handed",
+                        "bowling_style": "Right-arm fast",
+                        "is_captain": true,
+                        "is_wicketkeeper": false
+                    },
+                    {
+                        "id": "safi",
+                        "full_name": "Safi Ahmed",
+                        "common_names": ["Safi", "Safi Ahmed"],
+                        "role": "Batsman",
+                        "batting_style": "Right-handed",
+                        "bowling_style": "Right-arm medium",
+                        "is_captain": false,
+                        "is_wicketkeeper": false
+                    },
+                    {
+                        "id": "nehal",
+                        "full_name": "Nehal Ahmed",
+                        "common_names": ["Nehal", "Nehal Ahmed"],
+                        "role": "Bowler",
+                        "batting_style": "Right-handed",
+                        "bowling_style": "Right-arm fast",
+                        "is_captain": false,
+                        "is_wicketkeeper": false
+                    }
+                ],
+                name_mapping: {
+                    "bilal": "Bilal Ahmed",
+                    "safi": "Safi Ahmed", 
+                    "nehal": "Nehal Ahmed"
+                },
                 notes: {
                     last_updated: new Date().toISOString().split('T')[0],
-                    total_players: 0,
+                    total_players: 3,
                     active_squad: true
                 }
             };
@@ -399,5 +437,6 @@ class SquadManager {
 let squadManager;
 document.addEventListener('DOMContentLoaded', () => {
     squadManager = new SquadManager();
+    window.squadManager = squadManager; // Make it globally accessible
 });
 

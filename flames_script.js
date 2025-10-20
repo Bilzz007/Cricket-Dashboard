@@ -257,11 +257,81 @@ class FlamesDashboard {
         // Load initial dashboard data
         this.updateHeaderStats();
         this.loadOverview();
+        
+        // Load real cricket data if available
+        this.loadRealCricketData();
+    }
+
+    loadRealCricketData() {
+        // Try to load real cricket data
+        if (typeof REAL_CRICKET_DATA !== 'undefined') {
+            console.log('Loading real cricket data...');
+            this.realData = REAL_CRICKET_DATA;
+            this.updateWithRealData();
+        } else if (typeof getRealCricketData === 'function') {
+            console.log('Loading real cricket data via function...');
+            this.realData = getRealCricketData();
+            this.updateWithRealData();
+        } else {
+            console.log('No real cricket data available, using default data');
+        }
+    }
+
+    updateWithRealData() {
+        if (!this.realData) return;
+        
+        console.log('Updating dashboard with real data...');
+        
+        // Update header stats with real data
+        const stats = this.realData.statistics;
+        document.getElementById('headerMatches').textContent = stats.total_matches;
+        document.getElementById('headerWinRate').textContent = `${stats.win_rate}%`;
+        document.getElementById('headerPlayers').textContent = stats.total_players || this.squadData.squad.length;
+        
+        // Update overview stats
+        document.getElementById('totalMatches').textContent = stats.total_matches;
+        document.getElementById('winRate').textContent = `${stats.win_rate}%`;
+        document.getElementById('totalRuns').textContent = stats.total_runs_scored.toLocaleString();
+        
+        // Update squad with real players
+        if (this.realData.players) {
+            this.updateSquadWithRealPlayers();
+        }
+        
+        console.log('Dashboard updated with real data');
+    }
+
+    updateSquadWithRealPlayers() {
+        // Update squad data with real player statistics
+        this.realData.players.forEach(realPlayer => {
+            const squadPlayer = this.squadData.squad.find(p => 
+                p.id === realPlayer.id || p.full_name === realPlayer.name
+            );
+            
+            if (squadPlayer) {
+                // Update player stats
+                squadPlayer.stats = {
+                    runs: realPlayer.runs || 0,
+                    wickets: realPlayer.wickets || 0,
+                    matches: realPlayer.matches || 0,
+                    catches: realPlayer.catches || 0,
+                    batting_average: realPlayer.batting_average || 0,
+                    highest_score: realPlayer.highest_score || 0
+                };
+            }
+        });
+        
+        // Re-render squad if squad tab is active
+        if (document.getElementById('squad').classList.contains('active')) {
+            this.renderSquadCards();
+            this.updateSquadStats();
+        }
     }
 
     updateHeaderStats() {
-        const totalMatches = 48;
-        const winRate = 65;
+        // Use real data if available, otherwise use defaults
+        const totalMatches = this.realData ? this.realData.statistics.total_matches : 48;
+        const winRate = this.realData ? this.realData.statistics.win_rate : 65;
         const totalPlayers = this.squadData.squad.length;
 
         document.getElementById('headerMatches').textContent = totalMatches;

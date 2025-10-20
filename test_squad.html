@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Squad Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a3a;
+            color: white;
+            padding: 2rem;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        button {
+            padding: 1rem 2rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button.active {
+            background: #10b981;
+        }
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .squad-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        .message {
+            padding: 1rem;
+            background: #10b981;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 Squad Tab Test</h1>
+    
+    <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="players">Players</button>
+        <button class="tab-btn" data-tab="squad">Squad</button>
+    </div>
+
+    <div id="overview" class="tab-content active">
+        <h2>Overview Tab</h2>
+        <p>This is the overview tab content.</p>
+    </div>
+
+    <div id="players" class="tab-content">
+        <h2>Players Tab</h2>
+        <p>This is the players tab content.</p>
+    </div>
+
+    <div id="squad" class="tab-content">
+        <h2>🔥 Flames CC Squad</h2>
+        <p>Squad management system is loading...</p>
+        <div id="squadGrid">
+            <div class="squad-card">
+                <h3>Player 1: Abdul Majid</h3>
+                <p>ID: P001 | Role: Batsman | Captain: Yes</p>
+            </div>
+            <div class="squad-card">
+                <h3>Player 2: Bilal</h3>
+                <p>ID: P002 | Role: All-rounder</p>
+            </div>
+            <div class="squad-card">
+                <h3>Player 3: Hassan</h3>
+                <p>ID: P003 | Role: Batsman</p>
+            </div>
+        </div>
+        <div class="message">
+            ✅ If you can see this, the Squad tab is working!
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                
+                console.log('Switching to tab:', targetTab);
+                
+                // Remove active class from all
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                button.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        console.log('Squad test page loaded successfully');
+        console.log('Found', tabButtons.length, 'tab buttons');
+        console.log('Found', tabContents.length, 'tab content areas');
+    </script>
+</body>
+</html>
+

@@ -36,12 +36,16 @@ async function initializeDashboard() {
 
 // Setup tab navigation with enhanced animations
 function setupTabNavigation() {
+    console.log('Setting up tab navigation...');
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
+    console.log('Found tab buttons:', tabButtons.length);
+    console.log('Found tab contents:', tabContents.length);
 
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetTab = button.getAttribute('data-tab');
+            console.log('Tab clicked:', targetTab);
             
             // Remove active class from all tabs with animation
             tabButtons.forEach(btn => {
@@ -61,7 +65,13 @@ function setupTabNavigation() {
             
             // Show target tab with animation
             const targetContent = document.getElementById(targetTab);
-            targetContent.classList.add('active');
+            console.log('Target content found:', targetContent);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                console.log('Tab activated:', targetTab);
+            } else {
+                console.error('Target content not found:', targetTab);
+            }
             
             // Refresh data for the active tab
             refreshTabData(targetTab);
@@ -999,6 +1009,11 @@ function refreshTabData(tabId) {
         case 'players':
             updatePlayersGrid();
             break;
+        case 'squad':
+            console.log('Squad tab activated');
+            // Simple squad loading - bypass complex manager
+            loadSimpleSquad();
+            break;
         case 'analytics':
         case 'performance':
             refreshCharts();
@@ -1156,6 +1171,55 @@ function hideLoadingState() {
     }
 }
 
+// Simple squad loading function
+function loadSimpleSquad() {
+    console.log('Loading simple squad...');
+    const squadGrid = document.getElementById('squadGrid');
+    
+    if (!squadGrid) {
+        console.error('Squad grid not found!');
+        return;
+    }
+    
+    const players = [
+        { name: 'Bilal Ahmed', role: 'Captain & All-rounder', style: 'Right-handed', bowling: 'Right-arm fast' },
+        { name: 'Safi Ahmed', role: 'Batsman', style: 'Right-handed', bowling: 'Right-arm medium' },
+        { name: 'Nehal Ahmed', role: 'Bowler', style: 'Right-handed', bowling: 'Right-arm fast' },
+        { name: 'Hassan', role: 'Wicketkeeper', style: 'Right-handed', bowling: 'N/A' },
+        { name: 'Ali', role: 'Batsman', style: 'Left-handed', bowling: 'Right-arm off-spin' }
+    ];
+    
+    squadGrid.innerHTML = '';
+    players.forEach((player, index) => {
+        const card = document.createElement('div');
+        card.className = 'player-card';
+        card.innerHTML = `
+            <div class="player-info">
+                <h4>${player.name}</h4>
+                <p><strong>Role:</strong> ${player.role}</p>
+                <p><strong>Batting:</strong> ${player.style}</p>
+                <p><strong>Bowling:</strong> ${player.bowling}</p>
+            </div>
+            <div class="player-actions">
+                <button class="btn btn-primary edit-player-btn" onclick="editPlayer(${index})">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+        `;
+        squadGrid.appendChild(card);
+    });
+    
+    console.log('Simple squad loaded with ' + players.length + ' players');
+}
+
+// Squad functions
+function editPlayer(index) {
+    const players = ['Bilal Ahmed', 'Safi Ahmed', 'Nehal Ahmed', 'Hassan', 'Ali'];
+    console.log('Edit player clicked:', players[index]);
+    alert('Edit player: ' + players[index] + '\n\nThis would open an edit form in the full version.');
+}
+
 // Export functions for global access
 window.viewMatchDetails = viewMatchDetails;
 window.generateNewInsights = generateNewInsights;
+window.editPlayer = editPlayer;
