@@ -55,14 +55,18 @@ def extract_format1_with_fielding(pdf_path):
             match_data['match_info']['date'] = date
             print(f"Date: {date}")
     
-    # Venue
-    venue_match = re.search(r'([\w\s]+Ground)', pages_text[0])
-    if venue_match:
-        venue = venue_match.group(1).strip()
-        match_data['match_info']['venue'] = venue
-        print(f"Venue: {venue}")
+    # Venue - extract just the ground name
+    for line in lines:
+        if 'Ground' in line and len(line) < 50:
+            venue = line.strip()
+            # Clean up venue if it has date attached
+            venue = re.sub(r'\s+\d{2}-\w{3}-\d{4}', '', venue)
+            if venue and venue != match_data['match_info']['series']:
+                match_data['match_info']['venue'] = venue
+                print(f"Venue: {venue}")
+                break
     
-    # Scores
+    # Scores and Extras
     scores = re.findall(r'(\w+):(\d+)/(\d+)', full_text)
     print(f"\nMATCH SCORES:")
     print("=" * 70)
@@ -71,10 +75,34 @@ def extract_format1_with_fielding(pdf_path):
             match_data['match_info']['flames_score'] = int(runs)
             match_data['match_info']['flames_wickets'] = int(wickets)
             print(f"Flames: {runs}/{wickets}")
+            
+            # Extract Flames extras
+            extras_match = re.search(r'Flames:' + runs + r'/\d+.*?EXTRAS:\s*(\d+)\s*\(B:(\d+)\s+LB:(\d+)\s+NB:(\d+)\s+WD:(\d+)\)', full_text)
+            if extras_match:
+                match_data['match_info']['flames_extras'] = {
+                    'total': int(extras_match.group(1)),
+                    'byes': int(extras_match.group(2)),
+                    'leg_byes': int(extras_match.group(3)),
+                    'no_balls': int(extras_match.group(4)),
+                    'wides': int(extras_match.group(5))
+                }
+                print(f"  Extras: {extras_match.group(1)} (B:{extras_match.group(2)}, LB:{extras_match.group(3)}, NB:{extras_match.group(4)}, WD:{extras_match.group(5)})")
         else:
             match_data['match_info']['opponent_score'] = int(runs)
             match_data['match_info']['opponent_wickets'] = int(wickets)
             print(f"{match_data['match_info']['opponent']}: {runs}/{wickets}")
+            
+            # Extract opponent extras
+            extras_match = re.search(r'(\w+):' + runs + r'/\d+.*?EXTRAS:\s*(\d+)\s*\(B:(\d+)\s+LB:(\d+)\s+NB:(\d+)\s+WD:(\d+)\)', full_text)
+            if extras_match:
+                match_data['match_info']['opponent_extras'] = {
+                    'total': int(extras_match.group(2)),
+                    'byes': int(extras_match.group(3)),
+                    'leg_byes': int(extras_match.group(4)),
+                    'no_balls': int(extras_match.group(5)),
+                    'wides': int(extras_match.group(6))
+                }
+                print(f"  Extras: {extras_match.group(2)} (B:{extras_match.group(3)}, LB:{extras_match.group(4)}, NB:{extras_match.group(5)}, WD:{extras_match.group(6)})")
     
     # Result
     result = re.search(r'Result:\s*(.+)', full_text)
@@ -204,75 +232,95 @@ def extract_format1_with_fielding(pdf_path):
     # Extract bowling stats (clean version - only actual bowlers)
     print(f"\nFLAMES BOWLING:")
     print("=" * 70)
-    print(f"{'Bowler':<20} {'O':<6} {'R':<6} {'W':<6} {'Econ':<8}")
+    print(f"{'Bowler':<20} {'O':<6} {'R':<6} {'W':<6} {'M':<6} {'Econ':<8}")
     print("-" * 70)
     
-    # Pattern for bowling table
-    bowling_table_pattern = r'Bowler\s+O\s+R\s+W\s+M\s+ECO.*?\n((?:[A-Z][A-Za-z.]+\n[\d.]+\n\d+\n\d+\n\d+\n[\d.]+\n.*?\n)+)'
-    
-    bowling_table = re.search(bowling_table_pattern, pages_text[0], re.DOTALL)
-    if bowling_table:
-        bowling_text = bowling_table.group(1)
-        bowling_pattern = r'([A-Z][A-Za-z.]+)\n([\d.]+)\n(\d+)\n(\d+)\n(\d+)\n([\d.]+)'
-        bowling_entries = re.findall(bowling_pattern, bowling_text)
+    # Find bowling section in page 1
+    bowling_start = pages_text[0].find('Bowler\nO\nR\nW\nM\nECO')
+    if bowling_start != -1:
+        # Find the end of bowling section (before "No\nRuns\nOver")
+        bowling_end = pages_text[0].find('No\nRuns\nOver', bowling_start)
+        if bowling_end == -1:
+            bowling_end = bowling_start + 1000
         
-        seen_bowlers = set()
-        for entry in bowling_entries:
-            name = entry[0].strip()
-            overs = float(entry[1])
-            runs = int(entry[2])
-            wickets = int(entry[3])
-            maidens = int(entry[4])
-            economy = float(entry[5])
-            
-            # Only add if overs make sense (between 0 and 20) and not duplicate
-            if 0 <= overs <= 20 and name not in seen_bowlers:
-                bowler = {
-                    'name': name,
-                    'overs': overs,
-                    'runs': runs,
-                    'wickets': wickets,
-                    'maidens': maidens,
-                    'economy': economy
-                }
-                match_data['bowling']['flames'].append(bowler)
-                seen_bowlers.add(name)
-                print(f"{name:<20} {overs:<6} {runs:<6} {wickets:<6} {economy:<8.2f}")
+        bowling_section = pages_text[0][bowling_start:bowling_end]
+        
+        # Split into lines and parse
+        lines = bowling_section.split('\n')
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+            # Check if this is a bowler name (starts with capital letter, reasonable length)
+            if line and line[0].isupper() and 2 <= len(line) <= 20 and line not in ['Bowler', 'No', 'Runs', 'Over', 'Batsman']:
+                try:
+                    # Next 5-6 lines should be: O, R, W, M, ECO, ...
+                    if i + 5 < len(lines):
+                        name = line
+                        overs = float(lines[i+1].strip())
+                        runs = int(lines[i+2].strip())
+                        wickets = int(lines[i+3].strip())
+                        maidens = int(lines[i+4].strip())
+                        economy = float(lines[i+5].strip())
+                        
+                        # Validate data makes sense
+                        if 0 <= overs <= 20 and 0 <= runs <= 200 and 0 <= wickets <= 10:
+                            bowler = {
+                                'name': name,
+                                'overs': overs,
+                                'runs': runs,
+                                'wickets': wickets,
+                                'maidens': maidens,
+                                'economy': economy
+                            }
+                            match_data['bowling']['flames'].append(bowler)
+                            print(f"{name:<20} {overs:<6} {runs:<6} {wickets:<6} {maidens:<6} {economy:<8.2f}")
+                except:
+                    pass
+            i += 1
     
-    # Opponent bowling
+    # Opponent bowling from page 3
     print(f"\n{match_data['match_info']['opponent'].upper()} BOWLING:")
     print("=" * 70)
-    print(f"{'Bowler':<20} {'O':<6} {'R':<6} {'W':<6} {'Econ':<8}")
+    print(f"{'Bowler':<20} {'O':<6} {'R':<6} {'W':<6} {'M':<6} {'Econ':<8}")
     print("-" * 70)
     
     if len(pages_text) >= 3:
-        bowling_table = re.search(bowling_table_pattern, pages_text[2], re.DOTALL)
-        if bowling_table:
-            bowling_text = bowling_table.group(1)
-            bowling_pattern = r'([A-Z][A-Za-z.]+)\n([\d.]+)\n(\d+)\n(\d+)\n(\d+)\n([\d.]+)'
-            bowling_entries = re.findall(bowling_pattern, bowling_text)
+        bowling_start = pages_text[2].find('Bowler\nO\nR\nW\nM\nECO')
+        if bowling_start != -1:
+            bowling_end = pages_text[2].find('No\nRuns\nOver', bowling_start)
+            if bowling_end == -1:
+                bowling_end = bowling_start + 1000
             
-            seen_bowlers = set()
-            for entry in bowling_entries:
-                name = entry[0].strip()
-                overs = float(entry[1])
-                runs = int(entry[2])
-                wickets = int(entry[3])
-                maidens = int(entry[4])
-                economy = float(entry[5])
-                
-                if 0 <= overs <= 20 and name not in seen_bowlers:
-                    bowler = {
-                        'name': name,
-                        'overs': overs,
-                        'runs': runs,
-                        'wickets': wickets,
-                        'maidens': maidens,
-                        'economy': economy
-                    }
-                    match_data['bowling']['opponent'].append(bowler)
-                    seen_bowlers.add(name)
-                    print(f"{name:<20} {overs:<6} {runs:<6} {wickets:<6} {economy:<8.2f}")
+            bowling_section = pages_text[2][bowling_start:bowling_end]
+            
+            lines = bowling_section.split('\n')
+            i = 0
+            while i < len(lines):
+                line = lines[i].strip()
+                if line and line[0].isupper() and 2 <= len(line) <= 20 and line not in ['Bowler', 'No', 'Runs', 'Over', 'Batsman']:
+                    try:
+                        if i + 5 < len(lines):
+                            name = line
+                            overs = float(lines[i+1].strip())
+                            runs = int(lines[i+2].strip())
+                            wickets = int(lines[i+3].strip())
+                            maidens = int(lines[i+4].strip())
+                            economy = float(lines[i+5].strip())
+                            
+                            if 0 <= overs <= 20 and 0 <= runs <= 200 and 0 <= wickets <= 10:
+                                bowler = {
+                                    'name': name,
+                                    'overs': overs,
+                                    'runs': runs,
+                                    'wickets': wickets,
+                                    'maidens': maidens,
+                                    'economy': economy
+                                }
+                                match_data['bowling']['opponent'].append(bowler)
+                                print(f"{name:<20} {overs:<6} {runs:<6} {wickets:<6} {maidens:<6} {economy:<8.2f}")
+                    except:
+                        pass
+                i += 1
     
     # Display fielding statistics
     print(f"\nFLAMES FIELDING:")
