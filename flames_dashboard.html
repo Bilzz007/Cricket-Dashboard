@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Flames CC - Cricket Analytics Dashboard</title>
+    <link rel="stylesheet" href="flames_styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="flame-icon">🔥</div>
+                    <div class="title-section">
+                        <h1>FLAMES CC</h1>
+                        <p>Advanced Cricket Analytics Dashboard</p>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE DATA
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="header-stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat-value" id="headerMatches">48</span>
+                        <span class="mini-stat-label">Matches</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value" id="headerWinRate">65%</span>
+                        <span class="mini-stat-label">Win Rate</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value" id="headerPlayers">11</span>
+                        <span class="mini-stat-label">Players</span>
+                    </div>
+                </div>
+                <button id="refreshBtn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <div class="nav-container">
+                <button class="tab-btn active" data-tab="overview">
+                    <i class="fas fa-chart-line"></i> 
+                    <span>Overview</span>
+                    <div class="tab-indicator"></div>
+                </button>
+                <button class="tab-btn" data-tab="matches">
+                    <i class="fas fa-trophy"></i> 
+                    <span>Matches</span>
+                    <div class="tab-indicator"></div>
+                </button>
+                <button class="tab-btn" data-tab="players">
+                    <i class="fas fa-users"></i> 
+                    <span>Players</span>
+                    <div class="tab-indicator"></div>
+                </button>
+                <button class="tab-btn" data-tab="squad">
+                    <i class="fas fa-user-friends"></i> 
+                    <span>Squad</span>
+                    <div class="tab-indicator"></div>
+                </button>
+                <button class="tab-btn" data-tab="analytics">
+                    <i class="fas fa-chart-bar"></i> 
+                    <span>Analytics</span>
+                    <div class="tab-indicator"></div>
+                </button>
+                <button class="tab-btn" data-tab="insights">
+                    <i class="fas fa-brain"></i> 
+                    <span>AI Insights</span>
+                    <div class="tab-indicator"></div>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="section-header">
+                    <h2>🔥 Dashboard Overview</h2>
+                    <div class="header-actions">
+                        <select id="periodSelect" class="period-select">
+                            <option value="all">All Time</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalMatches">48</h3>
+                            <p>Total Matches</p>
+                            <span class="stat-change positive">+12 this season</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="winRate">65%</h3>
+                            <p>Win Rate</p>
+                            <span class="stat-change positive">+8% improvement</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalPlayers">11</h3>
+                            <p>Active Players</p>
+                            <span class="stat-change neutral">Stable squad</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-baseball-ball"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalRuns">2,847</h3>
+                            <p>Total Runs</p>
+                            <span class="stat-change positive">+450 this season</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Recent Performance</h3>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Match Results</h3>
+                        <canvas id="resultsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matches Tab -->
+            <div id="matches" class="tab-content">
+                <div class="section-header">
+                    <h2>🏆 Match History</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Match
+                        </button>
+                    </div>
+                </div>
+
+                <div class="matches-grid" id="matchesGrid">
+                    <!-- Matches will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Players Tab -->
+            <div id="players" class="tab-content">
+                <div class="section-header">
+                    <h2>👥 Player Statistics</h2>
+                    <div class="header-actions">
+                        <select class="period-select">
+                            <option value="all">All Time</option>
+                            <option value="season">This Season</option>
+                            <option value="recent">Last 10 Matches</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="players-grid" id="playersGrid">
+                    <!-- Players will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Squad Tab -->
+            <div id="squad" class="tab-content">
+                <div class="section-header">
+                    <h2>🔥 Flames CC Squad Management</h2>
+                    <div class="squad-actions">
+                        <button class="btn btn-primary" id="addPlayerBtn">
+                            <i class="fas fa-user-plus"></i> Add New Player
+                        </button>
+                        <button class="btn btn-success" id="saveSquadBtn">
+                            <i class="fas fa-save"></i> Save Squad
+                        </button>
+                        <button class="btn btn-secondary" id="exportSquadBtn">
+                            <i class="fas fa-download"></i> Export JSON
+                        </button>
+                    </div>
+                </div>
+
+                <div class="squad-stats-summary">
+                    <div class="squad-stat-card">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3 id="totalPlayersCount">11</h3>
+                            <p>Total Players</p>
+                        </div>
+                    </div>
+                    <div class="squad-stat-card">
+                        <i class="fas fa-baseball-ball"></i>
+                        <div>
+                            <h3 id="totalBatsmen">5</h3>
+                            <p>Batsmen</p>
+                        </div>
+                    </div>
+                    <div class="squad-stat-card">
+                        <i class="fas fa-bowling-ball"></i>
+                        <div>
+                            <h3 id="totalBowlers">4</h3>
+                            <p>Bowlers</p>
+                        </div>
+                    </div>
+                    <div class="squad-stat-card">
+                        <i class="fas fa-star"></i>
+                        <div>
+                            <h3 id="totalAllrounders">2</h3>
+                            <p>All-rounders</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="squad-grid" id="squadGrid">
+                    <!-- Squad cards will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-content">
+                <div class="section-header">
+                    <h2>📊 Advanced Analytics</h2>
+                    <div class="header-actions">
+                        <select class="period-select">
+                            <option value="all">All Time</option>
+                            <option value="season">This Season</option>
+                            <option value="recent">Recent</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-container large">
+                        <h3>Team Performance Trends</h3>
+                        <canvas id="teamTrendsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Player Contribution</h3>
+                        <canvas id="contributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Tab -->
+            <div id="insights" class="tab-content">
+                <div class="section-header">
+                    <h2>🧠 AI-Powered Insights</h2>
+                    <button class="btn btn-primary" id="generateInsightsBtn">
+                        <i class="fas fa-magic"></i> Generate New Insights
+                    </button>
+                </div>
+
+                <div class="insights-grid" id="insightsGrid">
+                    <!-- Insights will be generated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="flames_script.js"></script>
+</body>
+</html>
