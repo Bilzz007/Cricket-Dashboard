@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Flames CC - Advanced Cricket Analytics</title>
+    <link rel="stylesheet" href="advanced_styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="description" content="Advanced Cricket Analytics Dashboard for Flames CC - Comprehensive match analysis, player statistics, and performance insights">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="flame-icon">🔥</div>
+                    <div class="title-section">
+                        <h1>FLAMES CC</h1>
+                        <p>Advanced Cricket Analytics Dashboard</p>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            LIVE DATA
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="header-stats">
+                    <div class="mini-stat">
+                        <span class="mini-stat-value" id="headerMatches">47</span>
+                        <span class="mini-stat-label">Matches</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value" id="headerWinRate">59.6%</span>
+                        <span class="mini-stat-label">Win Rate</span>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-value" id="headerPlayers">7</span>
+                        <span class="mini-stat-label">Players</span>
+                    </div>
+                </div>
+                <button id="refreshBtn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="overview">
+                <i class="fas fa-chart-pie"></i> 
+                <span>Overview</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="tab-btn" data-tab="matches">
+                <i class="fas fa-calendar-alt"></i> 
+                <span>Matches</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="tab-btn" data-tab="players">
+                <i class="fas fa-users"></i> 
+                <span>Players</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="tab-btn" data-tab="analytics">
+                <i class="fas fa-chart-line"></i> 
+                <span>Analytics</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="tab-btn" data-tab="performance">
+                <i class="fas fa-trophy"></i> 
+                <span>Performance</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="tab-btn" data-tab="insights">
+                <i class="fas fa-brain"></i> 
+                <span>AI Insights</span>
+                <div class="tab-indicator"></div>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h2>🔥 Welcome to Flames CC Analytics</h2>
+                        <p>Comprehensive cricket performance analysis and insights</p>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="hero-stat-number" id="totalMatches">47</span>
+                            <span class="hero-stat-label">Total Matches</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number" id="winRate">59.6%</span>
+                            <span class="hero-stat-label">Win Rate</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="hero-stat-number" id="totalRuns">8,476</span>
+                            <span class="hero-stat-label">Runs Scored</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card featured">
+                        <div class="stat-header">
+                            <div class="stat-icon wins">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+12%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="wins">28</h3>
+                            <p>Wins</p>
+                            <div class="stat-progress">
+                                <div class="progress-bar" style="width: 59.6%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon losses">
+                                <i class="fas fa-times"></i>
+                            </div>
+                            <div class="stat-trend negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>-8%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="losses">17</h3>
+                            <p>Losses</p>
+                            <div class="stat-progress">
+                                <div class="progress-bar losses" style="width: 36.2%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon draws">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                            <div class="stat-trend neutral">
+                                <i class="fas fa-minus"></i>
+                                <span>0%</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="draws">2</h3>
+                            <p>Draws</p>
+                            <div class="stat-progress">
+                                <div class="progress-bar draws" style="width: 4.2%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon players">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-trend positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>+2</span>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalPlayers">7</h3>
+                            <p>Active Players</p>
+                            <div class="player-list">
+                                <span class="player-dot"></span>
+                                <span class="player-dot"></span>
+                                <span class="player-dot"></span>
+                                <span class="player-dot"></span>
+                                <span class="player-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card main-chart">
+                        <div class="chart-header">
+                            <h3>Win/Loss Performance</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-period="all">All Time</button>
+                                <button class="chart-btn" data-period="2023">2023</button>
+                                <button class="chart-btn" data-period="2022">2022</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="winLossChart"></canvas>
+                        </div>
+                        <div class="chart-insights">
+                            <div class="insight-item">
+                                <span class="insight-icon">📈</span>
+                                <span>Best month: October (80% win rate)</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="insight-icon">🎯</span>
+                                <span>Strongest against: Young Challengers</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Monthly Performance Trends</h3>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color wins"></span>
+                                    <span>Wins</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color losses"></span>
+                                    <span>Losses</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-insights">
+                    <div class="insight-card">
+                        <div class="insight-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>On Fire 🔥</h4>
+                            <p>Flames CC is on a winning streak with 4 consecutive victories!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Top Performer</h4>
+                            <p>Ahmed Khan leading with 1,245 runs and 49.8 average</p>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <div class="insight-icon">
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <div class="insight-content">
+                            <h4>Next Match</h4>
+                            <p>Upcoming: vs Karachi Warriors on Dec 15th</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matches Tab -->
+            <div id="matches" class="tab-content">
+                <div class="section-header">
+                    <h2>Match History & Analysis</h2>
+                    <div class="filters">
+                        <select id="yearFilter">
+                            <option value="all">All Years</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                        </select>
+                        <select id="opponentFilter">
+                            <option value="all">All Opponents</option>
+                        </select>
+                        <select id="resultFilter">
+                            <option value="all">All Results</option>
+                            <option value="Win">Wins Only</option>
+                            <option value="Loss">Losses Only</option>
+                            <option value="Draw">Draws Only</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="matches-summary">
+                    <div class="summary-card">
+                        <h4>Recent Form</h4>
+                        <div class="form-indicator">
+                            <span class="form-result win">W</span>
+                            <span class="form-result win">W</span>
+                            <span class="form-result win">W</span>
+                            <span class="form-result win">W</span>
+                            <span class="form-result loss">L</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Best Performance</h4>
+                        <p>vs Young Challengers - Won by 23 runs</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Highest Score</h4>
+                        <p>195/4 vs Grace Sports</p>
+                    </div>
+                </div>
+
+                <div class="matches-table-container">
+                    <table id="matchesTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Opponent</th>
+                                <th>Venue</th>
+                                <th>Result</th>
+                                <th>Score</th>
+                                <th>Margin</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Players Tab -->
+            <div id="players" class="tab-content">
+                <div class="section-header">
+                    <h2>Player Performance Analysis</h2>
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="cards">Cards</button>
+                        <button class="view-btn" data-view="table">Table</button>
+                    </div>
+                </div>
+                
+                <div class="players-grid" id="playersGrid">
+                    <!-- Player cards will be dynamically generated -->
+                </div>
+                
+                <div class="players-table-container" id="playersTable" style="display: none;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Matches</th>
+                                <th>Runs</th>
+                                <th>Average</th>
+                                <th>Wickets</th>
+                                <th>Bowl Avg</th>
+                                <th>Economy</th>
+                                <th>Catches</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-content">
+                <div class="section-header">
+                    <h2>Advanced Analytics</h2>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3>Batting Performance Analysis</h3>
+                        <canvas id="battingChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Bowling Performance Analysis</h3>
+                        <canvas id="bowlingChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Team Run Rate Trends</h3>
+                        <canvas id="runRateChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>Opponent Analysis</h3>
+                        <canvas id="opponentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Tab -->
+            <div id="performance" class="tab-content">
+                <div class="section-header">
+                    <h2>Performance Metrics</h2>
+                </div>
+                
+                <div class="performance-grid">
+                    <div class="metric-card">
+                        <h3>Batting Leaders</h3>
+                        <div class="leaderboard" id="battingLeaders"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Bowling Leaders</h3>
+                        <div class="leaderboard" id="bowlingLeaders"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Fielding Leaders</h3>
+                        <div class="leaderboard" id="fieldingLeaders"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Tab -->
+            <div id="insights" class="tab-content">
+                <div class="section-header">
+                    <h2>AI-Powered Insights</h2>
+                    <button class="btn btn-primary" id="generateInsights">
+                        <i class="fas fa-brain"></i> Generate New Insights
+                    </button>
+                </div>
+                
+                <div class="insights-grid">
+                    <div class="insight-card large">
+                        <h3><i class="fas fa-chart-line"></i> Performance Trends</h3>
+                        <p id="trendInsight">Based on your recent matches, Flames CC shows strong momentum with a 4-match winning streak. Your team's batting average has improved by 15% in the last 10 matches, indicating better form and confidence at the crease.</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3><i class="fas fa-target"></i> Improvement Areas</h3>
+                        <p id="improvementInsight">Focus on death bowling - your economy rate in the last 5 overs has increased by 1.2 runs per over. Consider rotating bowlers more frequently in the final overs.</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3><i class="fas fa-star"></i> Key Strengths</h3>
+                        <p id="strengthInsight">Your middle-order batting is exceptional, with an average partnership of 45 runs. Ahmed Khan and Bilal Ahmed form a formidable duo that consistently delivers under pressure.</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3><i class="fas fa-lightbulb"></i> Strategic Recommendations</h3>
+                        <p id="strategyInsight">Consider opening with Usman Sheikh more often - his strike rate of 108.9 against pace bowling in the first 6 overs gives you an early advantage.</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3><i class="fas fa-calendar"></i> Upcoming Fixtures</h3>
+                        <p id="fixtureInsight">Your next 3 matches are against teams with weaker bowling attacks. This is an excellent opportunity to boost your net run rate and secure a higher position in the standings.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="real_cricket_data.js"></script>
+    <script src="fix_data_loading.js"></script>
+    <script src="advanced_script.js"></script>
+</body>
+</html>
