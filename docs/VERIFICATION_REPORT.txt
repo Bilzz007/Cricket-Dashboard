@@ -1,0 +1,273 @@
+====================================================================================================
+CRICKET DATA EXTRACTION - VERIFICATION REPORT
+====================================================================================================
+
+Total Matches Extracted: 129
+Flames Matches: 35
+Raftaar Matches: 48
+
+====================================================================================================
+SAMPLE MATCHES FOR MANUAL VERIFICATION
+====================================================================================================
+
+====================================================================================================
+SAMPLE: FIRST FLAMES MATCH
+====================================================================================================
+
+MATCH INFORMATION:
+  Filename: 13 - 26-Sep-21 -  CLASSIC XI KARACHI VS Flames.pdf
+  Tournament: 16 ALLSTAR CHAMPIONSHIP 2021 (League Matches)
+  Teams: Flames Cc Khi vs Classic Xi Karachi
+  Venue: Eid Gah Cricket Ground, Karachi on 26/09/2021,  07:34:05
+  Date: 
+  Toss: Classic Xi Karachi opt to field
+  Result: Flames Cc Khi won by 9 runs
+
+FIRST INNINGS:
+  Team: Flames Cc Khi
+  Score: 127/9 in 18.0 overs
+  Extras: {'total': '15', 'wd': '13', 'nb': '1', 'lb': '1'}
+
+  BATTING:
+    1. Abdul Majid          b Imran                    25(23) 0x4 1x6 SR:108.70
+    2. Muhammad Bilal Taak  b Fahad                    13( 8) 2x4 0x6 SR:162.50
+    3. Shahmeer Patel       c&b Imran                  33(38) 0x4 0x6 SR:86.84
+    4. Danish Ahmed         b Ussama                    1( 2) 0x4 0x6 SR:50.00
+    5. Naki  lbw            b Ussama                    0( 1) 0x4 0x6 SR:0.00
+    ... and 6 more batsmen
+
+  BOWLING:
+    1. Sarim  1                0 overs   0 runs 2 wkts Eco:15.00
+    2. Fahad  1                0 overs   1 runs 2 wkts Eco:10.00
+    3. Noman  2                0 overs   0 runs 2 wkts Eco:9.00
+    4. Imran Tariq  2          0 overs   0 runs 4 wkts Eco:6.00
+    5. Ussama  4               0 overs   2 runs 10 wkts Eco:4.75
+    ... and 3 more bowlers
+
+SECOND INNINGS:
+  Team: Classic Xi Karachi
+  Score: 118/9 in 18.0 overs
+  Extras: {'total': '10', 'wd': '6', 'b': '2', 'nb': '1', 'lb': '1'}
+
+  BATTING:
+    1. Fahad                b Muhammad                  2( 7) 0x4 0x6 SR:28.57
+    2. Mubashir             run out Huzaifa Abidi / †  Muhammad Bilal Taak   1( 4) 0x4 0x6 SR:25.00
+    3. Sarim                b Zain                      1( 4) 0x4 0x6 SR:25.00
+    4. Noman                run out Hassan Ahmed / †  Muhammad Bilal Taak   1( 1) 0x4 0x6 SR:100.00
+
+  BOWLING:
+    1. Syed Numair Haseeb  4    0 overs   1 runs 14 wkts Eco:5.00
+    2. Nehal Ahmed  1          0 overs   0 runs 3 wkts Eco:3.00
+    3. Asif  4                 0 overs   2 runs 11 wkts Eco:6.75
+    4. Zain Hassan  4          0 overs   2 runs 9 wkts Eco:6.00
+    5. Muhammad Patel  1       0 overs   1 runs 2 wkts Eco:5.00
+    ... and 2 more bowlers
+
+FIELDING ANALYSIS:
+  Dismissal Types: {'bowled': 7, 'caught': 4, 'not_out': 2, 'run_out': 2}
+  Top Catchers:
+    - b: 1 catches
+    - Fahad: 1 catches
+    - Ussama: 1 catches
+  Top Bowlers:
+    - Imran: 3 wickets
+    - Ussama: 2 wickets
+    - Fahad: 1 wickets
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+SAMPLE: FIRST RAFTAAR MATCH
+====================================================================================================
+
+MATCH INFORMATION:
+  Filename: Scorecard_11031968.pdf
+  Tournament: ALLSTAR CHAMPIONSHIP SEASON 27 (League Matches)
+  Teams: MatchRaftaar CC vs 
+  Venue: Ground Nazimabad Eidgah,
+  Date: 2024-05-05, 02:11 AM UTCMatch Result
+  Toss: Toss Raftaar CC opt to bat
+  Result: Garden EWCC won by 6 wickets
+
+FIRST INNINGS:
+  Team: 10/19/25, 6:47 PM cricher oes.com 3 of 4Raftaar CC
+  Score: 162/9 in 20.0 overs
+  Extras: {'total': '16', 'b': '2', 'wd': '13', 'lb': '1'}
+
+  BATTING:
+    1. Abdul Majid          c Essa b Raja              20(21) 1x4 1x6 SR:95.24
+    2. Sufyan Baig          c Sam b Ali                20(15) 2x4 1x6 SR:133.33
+    3. Syed Abdal Haider    c Sam b Ali                15(17) 2x4 0x6 SR:88.24
+    4. Owais                c CricHeroes deleted user b Shehzad  12(14) 1x4 0x6 SR:85.71
+    5. Huzaifa Ali Abidi    c Muhammad Hamza (Vj) b Raja   2( 5) 0x4 0x6 SR:40.00
+    ... and 5 more batsmen
+
+  BOWLING:
+    1. Essa 4                  0 overs   0 runs 9 wkts Eco:9.00
+    2. Ali Khan 4              0 overs   2 runs 15 wkts Eco:3.25
+    3. CricHeroes deleted user 4    0 overs   0 runs 5 wkts Eco:11.25
+    4. Raja Sahab 4            0 overs   3 runs 10 wkts Eco:9.00
+    5. Shehzad W arsi 2        0 overs   1 runs 5 wkts Eco:6.00
+    ... and 1 more bowlers
+
+SECOND INNINGS:
+  Team: 10/19/25, 6:47 PM cricher oes.com 4 of 4Garden EWCC
+  Score: 165/4 in 18.0 overs
+  Extras: {'total': '15', 'wd': '15'}
+
+  BATTING:
+    1. Sam  lbw             b Nehal                     0( 2) 0x4 0x6 SR:0.00
+    2. Jamil Czn            b Nehal                    11( 8) 1x4 1x6 SR:137.50
+    3. Muhammad Hamza    lbw b Zaem                      1( 3) 0x4 0x6 SR:33.33
+    4. Meer Hamza           c Nehal b Asif             15(16) 3x4 0x6 SR:93.75
+    5. Nehal Khan           not out                    84(54) 14x4 1x6 SR:155.56
+    ... and 1 more batsmen
+
+  BOWLING:
+    1. Zaem  4                 0 overs   1 runs 12 wkts Eco:8.50
+    2. Nehal 4                 0 overs   2 runs 12 wkts Eco:9.25
+    3. Adil Farhan 2           0 overs   0 runs 5 wkts Eco:6.50
+    4. Zain Hassan 4           0 overs   0 runs 9 wkts Eco:9.25
+    5. Asif 1                  0 overs   1 runs 3 wkts Eco:9.00
+    ... and 2 more bowlers
+
+FIELDING ANALYSIS:
+  Dismissal Types: {'caught': 8, 'bowled': 5, 'not_out': 3}
+  Top Catchers:
+    - Sam: 2 catches
+    - Muhammad: 2 catches
+    - Essa: 1 catches
+  Top Bowlers:
+    - Nehal: 5 wickets
+    - Raja: 3 wickets
+    - Ali: 2 wickets
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+SAMPLE: MIDDLE MATCH
+====================================================================================================
+
+MATCH INFORMATION:
+  Filename: Scorecard_14740378.pdf
+  Tournament: 
+  Teams: MatchRaftaar CC vs 
+  Venue: Ground IBA Karachi University ,
+  Date: 2025-01-19, 02:50 AM UTCMatch Result
+  Toss: Toss Raftaar CC opt to bat
+  Result: Raftaar CC won by 33 runs
+
+FIRST INNINGS:
+  Team: 10/19/25, 7:02 PM cricher oes.com 3 of 4Raftaar CC
+  Score: 162/4 in 18.0 overs
+  Extras: {'total': '18', 'wd': '12', 'lb': '4', 'nb': '2'}
+
+  BATTING:
+    1. Sumair Patel         b Mahasagar                42(20) 7x4 1x6 SR:210.00
+    2. Abdul Majid          c Uzair b Basalat          21(18) 1x4 1x6 SR:116.67
+    3. Hamza Sabir          c Muhammad Sameer Lakho b Mirza  40(31) 3x4 1x6 SR:129.03
+    4. Syed Abdal Haider    c Muhammad Sameer Lakho b Mirza  16(16) 2x4 0x6 SR:100.00
+    5. Sufyan Baig          not out                    23(20) 3x4 0x6 SR:115.00
+    ... and 1 more batsmen
+
+  BOWLING:
+    1. Mohsin Maqsood 2        0 overs   0 runs 3 wkts Eco:10.50
+    2. Syed Muneer 3           0 overs   0 runs 6 wkts Eco:10.67
+    3. Mahasagar Langhani 2    0 overs   1 runs 2 wkts Eco:13.00
+    4. Basalat Hussain 4       0 overs   1 runs 8 wkts Eco:7.75
+    5. Syed Zeeshan 3          0 overs   0 runs 8 wkts Eco:7.33
+    ... and 1 more bowlers
+
+SECOND INNINGS:
+  Team: 10/19/25, 7:02 PM cricher oes.com 4 of 4Kings Cricket Club
+  Score: 129/10 in 16.4 overs
+  Extras: {'total': '20', 'wd': '17', 'lb': '1', 'nb': '2'}
+
+  BATTING:
+    1. Veenjhar Kings  c Huzaifa Ali Abidi b Zaem                      0( 1) 0x4 0x6 SR:0.00
+    2. Danish Cricket       b Sumair                   16(13) 1x4 1x6 SR:123.08
+    3. Moiz Alam            run out Syed Abdal Haider   8(14) 0x4 0x6 SR:57.14
+    4. Muhammad Sameer Lakho b Sumair                   12(10) 2x4 0x6 SR:120.00
+    5. Waqas Mahmood        b Nehal                    13(20) 0x4 0x6 SR:65.00
+    ... and 6 more batsmen
+
+  BOWLING:
+    1. Zaem 3                  0 overs   1 runs 10 wkts Eco:4.33
+    2. Huzaifa Ali Abidi 1     0 overs   0 runs 1 wkts Eco:17.00
+    3. Sumair Patel 3          0 overs   3 runs 13 wkts Eco:5.00
+    4. Asif 3.4                0 overs   2 runs 13 wkts Eco:6.27
+    5. Abdur Rehman 2          0 overs   0 runs 7 wkts Eco:6.00
+    ... and 2 more bowlers
+
+FIELDING ANALYSIS:
+  Dismissal Types: {'bowled': 9, 'caught': 4, 'not_out': 3, 'run_out': 1}
+  Top Catchers:
+    - Muhammad: 2 catches
+    - Uzair: 1 catches
+    - Asif: 1 catches
+  Top Bowlers:
+    - Sumair: 3 wickets
+    - Nehal: 3 wickets
+    - Mirza: 2 wickets
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+SAMPLE: RECENT MATCH
+====================================================================================================
+
+MATCH INFORMATION:
+  Filename: Scorecard_6550944.pdf
+  Tournament: 
+  Teams: MatchFlames Cc Khi vs 
+  Venue: Ground Eidgah Cricket Ground,
+  Date: 2023-04-30, 05:30 AM UTCMatch Result
+  Toss: Toss QUICK STRIKERS opt to field
+  Result: QUICK STRIKERS won by 4 wickets
+
+FIRST INNINGS:
+  Team: 10/19/25, 6:34 PM cricher oes.com 3 of 4Flames Cc Khi
+  Score: 160/6 in 20.0 overs
+  Extras: {'total': '20', 'wd': '19', 'lb': '1'}
+
+  BATTING:
+
+  BOWLING:
+    1. MUHAMMAD YOUSUF 3       0 overs   0 runs 6 wkts Eco:9.33
+    2. Muhammad Abdul Rehman Danish 2    0 overs   0 runs 8 wkts Eco:6.50
+    3. Muhammad Ammad Rubi 4    0 overs   2 runs 10 wkts Eco:4.25
+    4. Syed Fawwad  3          0 overs   1 runs 5 wkts Eco:9.67
+    5. Muhammad Furqan Kamil 4    0 overs   0 runs 7 wkts Eco:7.00
+    ... and 2 more bowlers
+
+SECOND INNINGS:
+  Team: 10/19/25, 6:34 PM cricher oes.com 4 of 4QUICK STRIKERS
+  Score: 161/6 in 18.5 overs
+  Extras: {'total': '23', 'wd': '19', 'lb': '4'}
+
+  BATTING:
+    1. Kashif ali           run out Syed Numair Haseeb  28(14) 3x4 2x6 SR:200.00
+    2. Abdul Baseer         b Zain                     23(30) 3x4 0x6 SR:76.67
+    3. Abdullah Siddique    run out Nehal               5(10) 1x4 0x6 SR:50.00
+    4. Emi                  c Syed Numair Haseeb b      4( 6) 1x4 0x6 SR:66.67
+    5. Muhammad talha       run out Syed Abdal Haider / Abdur Rehman  11( 8) 1x4 0x6 SR:137.50
+    ... and 3 more batsmen
+
+  BOWLING:
+    1. Zaem 2                  0 overs   0 runs 6 wkts Eco:9.50
+    2. Nehal 3                 0 overs   0 runs 7 wkts Eco:12.67
+    3. Syed Numair Haseeb 3.5    0 overs   1 runs 7 wkts Eco:9.65
+    4. Zain Hassan 4           1 overs   1 runs 18 wkts Eco:3.00
+    5. Sufyan Baig 1           0 overs   0 runs 3 wkts Eco:13.00
+    ... and 2 more bowlers
+
+FIELDING ANALYSIS:
+  Dismissal Types: {'run_out': 3, 'bowled': 2, 'caught': 1, 'not_out': 2}
+  Top Catchers:
+    - Syed: 1 catches
+  Top Bowlers:
+    - Zain: 1 wickets
+    - b: 1 wickets
+    - Syed: 1 wickets
+
+----------------------------------------------------------------------------------------------------
